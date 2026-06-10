@@ -1,5 +1,5 @@
 import { describe , it, expect } from "vitest";
-import { longestString , isPrime } from "../example"
+import { longestString , isPrime , shippingCost } from "../example"
 
 
 describe('example.longestString',() =>{
@@ -62,5 +62,55 @@ describe('example.isPrime',() =>{
         expect(isPrime(7)).toBeTypeOf('boolean')
         expect(typeof isPrime(4)).toBe('boolean')
     })
+
+    it('return false for non integer number' , () =>{
+        expect(isPrime(2.5)).toBe(false)
+    })
+
+})
+
+
+describe('example.shippingCost',() =>{
+    // it('return a number',() =>{
+    //     expect(shippingCost(2)).toBeTypeOf('number')
+    // })
+
+    it('charges correct prices for interior weights' , () =>{
+        expect(shippingCost(0.5)).toBe(3.99)
+        expect(shippingCost(3)).toBe(5.99)
+        expect(shippingCost(10)).toBe(8.99)
+        expect(shippingCost(50)).toBe(14.99)
+    })
+
+    it('charges the correct prices at boundries' , () =>{
+        expect(shippingCost(1)).toBe(3.99)
+        expect(shippingCost(5)).toBe(5.99)
+        expect(shippingCost(20)).toBe(8.99)
+        expect(shippingCost(21)).toBe(14.99)
+    })
+
+    it('applies FREESHIPPING coupon exactly' ,() =>{
+        expect(shippingCost(1 , 'FREESHIPPING')).toBe(0)
+        expect(shippingCost(21 , 'FREESHIPPING')).toBe(0)
+    })
+
+    it('ignore non matching coupon',() =>{
+        expect(shippingCost(1 , 'freeshipping')).toBe(3.99)
+        expect(shippingCost(5 , 'nothing')).toBe(5.99)
+    })
+
+    it('throw an error for invalid weight',() =>{
+        // expect(() => shippingCost(0)).toThrow('the Weight must be greater than 0') //strict check 
+        expect(() => shippingCost(0)).toThrow(/(?=.*weight)(?=.*0)/i)   //check weight and 0 should be present through regex
+        expect(() => shippingCost(-5)).toThrow(/(?=.*weight)(?=.*0)/i)   
+        expect(() => shippingCost('2')).toThrow(/(?=.*weight)(?=.*number)/i)   
+    })
+
+
+    it('throw an error when coupon is not a string' ,() =>{
+        expect(() => shippingCost(1, 123)).toThrow(/coupon/i)
+        expect(() => shippingCost(1, null)).toThrow(/coupon/i)
+    })
+
 
 })
