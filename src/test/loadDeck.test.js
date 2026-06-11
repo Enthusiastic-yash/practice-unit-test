@@ -11,13 +11,24 @@ describe('laodDeck' ,() =>{
 
     it('resolve a {suits[4], values[13] } deck', async () =>{
         const result = await loadDeck();
-        expect(typeof result).toBe('object')
+        
 
-        expect(result).toHaveProperty('suits')
-        expect(result).toHaveProperty('values')
+        expect(result).toEqual(
+            expect.objectContaining(
+                {
+                    suits: expect.any(Array),
+                    values: expect.any(Array)
+                }
+            )
+        )
 
-        expect(Array.isArray(result.suits)).toBe(true);
-        expect(Array.isArray(result.values)).toBe(true);
+            //above single test can cover all the below  commented test
+        // expect(typeof result).toBe('object')
+        // expect(result).toHaveProperty('suits')
+        // expect(result).toHaveProperty('values')
+
+        // expect(Array.isArray(result.suits)).toBe(true);
+        // expect(Array.isArray(result.values)).toBe(true);
 
         expect(result.suits).toHaveLength(4)
         expect(result.values).toHaveLength(13)
